@@ -1,0 +1,5 @@
+{"win_rate":0.68,"realized_pnl_usd":18420,"realized_pnl_percent":0.32,"traded_times":74,"traded_token_count":16,"top5_tokens":[
+  {"chain":"robinhood","token_symbol":"LEAF","token_address":"0x000000000000000000000000000000000000f001","realized_pnl":4400,"realized_roi":0.45},
+  {"chain":"robinhood","token_symbol":"FERN","token_address":"0x000000000000000000000000000000000000f006","realized_pnl":3800,"realized_roi":0.31},
+  {"chain":"robinhood","token_symbol":"ACORN","token_address":"0x000000000000000000000000000000000000f007","realized_pnl":2900,"realized_roi":0.25}
+]}

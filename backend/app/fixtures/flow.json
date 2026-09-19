@@ -1,0 +1,5 @@
+{
+  "calm":{"data":[{"smart_trader_net_flow_usd":120000,"smart_trader_wallet_count":4,"top_pnl_net_flow_usd":42000,"top_pnl_wallet_count":3,"whale_net_flow_usd":14000,"whale_wallet_count":2,"exchange_net_flow_usd":0,"public_figure_net_flow_usd":0,"fresh_wallets_net_flow_usd":10000,"fresh_wallets_wallet_count":0}]},
+  "forage":{"data":[{"smart_trader_net_flow_usd":19000,"smart_trader_wallet_count":1,"top_pnl_net_flow_usd":0,"top_pnl_wallet_count":0,"whale_net_flow_usd":0,"whale_wallet_count":0,"exchange_net_flow_usd":1000,"public_figure_net_flow_usd":0,"fresh_wallets_net_flow_usd":4000,"fresh_wallets_wallet_count":0}]},
+  "storm":{"data":[{"smart_trader_net_flow_usd":-24000,"smart_trader_wallet_count":3,"top_pnl_net_flow_usd":-36000,"whale_net_flow_usd":-12000,"exchange_net_flow_usd":88000,"fresh_wallets_net_flow_usd":4000}]}
+}

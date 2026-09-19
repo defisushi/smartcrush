@@ -1,0 +1,36 @@
+{
+  "name": "smart-crush",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "vitest run",
+    "test:browser": "node scripts/verify-browser.mjs && node scripts/verify-api.mjs",
+    "lint": "npm run format:check && npm run typecheck",
+    "typecheck": "tsc --noEmit",
+    "format:check": "prettier --check src tests scripts api vite.config.ts",
+    "format": "prettier --write src tests scripts api vite.config.ts",
+    "dev:test": "vite --host 127.0.0.1 --port 5174 --mode test"
+  },
+  "dependencies": {
+    "framer-motion": "^12.23.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zustand": "^5.0.6"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vercel/node": "^5.1.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "prettier": "^3.9.8",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4"
+  }
+}

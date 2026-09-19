@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+*.tsbuildinfo
+playwright-report/
+test-results/
+.DS_Store
+__pycache__/
+.venv/
+.vercel/
+backend/.env
+artifacts/audit-*/live-responses.json
+artifacts/themes/

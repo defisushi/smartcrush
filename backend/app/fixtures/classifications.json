@@ -1,0 +1,18 @@
+[
+  {"name":"fund_confirmed","cat":{"persona":"owl","labels":["Fund"]},"context":{"hold_confirmed":true,"independent_buyers":2,"independent_kitchen_buyers":2},"expected":"kitchen"},
+  {"name":"30d_young","cat":{"persona":"raccoon","labels":["30D Smart Trader"]},"context":{"token_age_days":0.458,"sector":"meme","price_usd":1.08},"expected":"forage"},
+  {"name":"22pct_hard_limit_wins","cat":{"persona":"raccoon","labels":["30D Smart Trader"]},"context":{"token_age_days":0.458,"price_usd":1.22},"expected":"ignore"},
+  {"name":"cex_distribution","context":{"smart_trader_net_flow_usd":-10000,"exchange_net_flow_usd":200000},"expected":"ignore"},
+  {"name":"related_false_confirmation","context":{"related_wallet_risk":true,"hold_confirmed":null,"independent_kitchen_buyers":1},"expected":"ignore"},
+  {"name":"too_young","context":{"token_age_days":3},"expected":"forage"},
+  {"name":"sold_in_confirmation","context":{"hold_confirmed":false},"expected":"ignore"},
+  {"name":"price_extended","context":{"price_usd":1.13},"expected":"ignore"},
+  {"name":"unknown_price_move","print":{"price_usd_at_print":null},"expected":"forage"},
+  {"name":"dust","print":{"notional_usd":499},"expected":"ignore"},
+  {"name":"wrong_chain","print":{"chain":"ethereum"},"expected":"ignore"},
+  {"name":"sleepy","cat":{"status":"sleepy"},"expected":"ignore"},
+  {"name":"stablecoin","print":{"token_symbol":"USDG"},"expected":"ignore"},
+  {"name":"watching","cat":{"follow_mode":"watching"},"expected":"kitchen"},
+  {"name":"owl_meme","cat":{"persona":"owl","labels":["Fund"]},"context":{"token_age_days":1,"sector":"meme"},"expected":"ignore"},
+  {"name":"unscored","cat":{"win_rate_90d":null},"expected":"forage"}
+]
