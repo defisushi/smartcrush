@@ -34,11 +34,12 @@ import { RosterFullModal } from "./components/RosterFullModal";
 import { Modal } from "./components/Modal";
 import { Connection } from "./components/Connection";
 import { SettingsMenu } from "./components/SettingsMenu";
+import { Welcome } from "./components/Welcome";
 import { MatchModal } from "./components/MatchModal";
 import { RosterCapacity } from "./components/RosterCapacity";
 export default function App() {
   const store = useAppStore(),
-    { mode, theme } = store;
+    { mode, theme, onboardingComplete } = store;
   const [tab, setTab] = useState<Tab>("scout"),
     [keyReady, setKeyReady] = useState(hasApiKey());
   const [settings, setSettings] = useState(false),
@@ -108,6 +109,11 @@ export default function App() {
   useEffect(() => {
     if (!mode && hasApiKey()) store.setMode("live");
   }, [mode, store.setMode]);
+
+  const forceWelcome =
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).get("welcome") === "1";
+  const showWelcome = forceWelcome || !onboardingComplete;
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 10000);
     const visible = () => {
@@ -265,6 +271,7 @@ export default function App() {
                   ? buildSignals(trades.value, holdings, addresses)
                   : [],
                 updates,
+                trades.status === "fulfilled",
               );
             if (incomplete)
               setPollError(
@@ -275,6 +282,19 @@ export default function App() {
         if (generation.current === version) lastRoster.current = signature;
       } catch (e) {
         if (generation.current === version) {
+          useAppStore
+            .getState()
+            .applyPoll(
+              mode,
+              [],
+              Object.fromEntries(
+                current.roster.map((entry) => [
+                  entry.wallet.address,
+                  { addedAt: entry.addedAt, holdings: null },
+                ]),
+              ),
+              false,
+            );
           setPollError(
             e instanceof Error
               ? e.message
@@ -342,40 +362,42 @@ export default function App() {
     closeBreakup = useCallback(() => setBreaking(null), []);
   return (
     <AppFrame theme={theme}>
-      <header className="app-header">
-        <a
-          className="brand"
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            setTab("scout");
-          }}
-          aria-label="Smartcrush home"
-        >
-          <span className="brand-mark">
-            <Heart size={19} fill="currentColor" strokeWidth={0} />
-          </span>
-          <span className="brand-lockup">
-            <span className="brand-wordmark">
-              Smart<span>crush</span>
-              <i>™</i>
-            </span>
-          </span>
-        </a>
-        <div className="header-right">
-          <span className="chain-pill">
-            <span /> ROBINHOOD
-          </span>
-          <button
-            className="icon-button"
-            aria-label="Settings"
-            onClick={() => setSettings(true)}
+      {!showWelcome && (
+        <header className="app-header">
+          <a
+            className="brand"
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setTab("scout");
+            }}
+            aria-label="Smartcrush home"
           >
-            <Settings2 size={18} />
-          </button>
-        </div>
-      </header>
-      {ready && (
+            <span className="brand-mark">
+              <Heart size={19} fill="currentColor" strokeWidth={0} />
+            </span>
+            <span className="brand-lockup">
+              <span className="brand-wordmark">
+                Smart<span>crush</span>
+                <i>™</i>
+              </span>
+            </span>
+          </a>
+          <div className="header-right">
+            <span className="chain-pill">
+              <span /> ROBINHOOD
+            </span>
+            <button
+              className="icon-button"
+              aria-label="Settings"
+              onClick={() => setSettings(true)}
+            >
+              <Settings2 size={18} />
+            </button>
+          </div>
+        </header>
+      )}
+      {ready && !showWelcome && (
         <div className={`mode-banner ${mode === "demo" ? "demo" : ""}`}>
           <span>
             {mode === "demo"
@@ -398,7 +420,22 @@ export default function App() {
         </div>
       )}
       <main className="main-content" ref={main} id="main-content">
-        {!ready ? (
+        {showWelcome ? (
+          <Welcome
+            onContinue={() => {
+              store.completeOnboarding();
+              if (forceWelcome) {
+                const url = new URL(window.location.href);
+                url.searchParams.delete("welcome");
+                window.history.replaceState(
+                  {},
+                  "",
+                  url.pathname + url.search + url.hash,
+                );
+              }
+            }}
+          />
+        ) : !ready ? (
           <Connection
             onConnect={(key) => switchMode("live", key)}
             onConfiguredConnect={

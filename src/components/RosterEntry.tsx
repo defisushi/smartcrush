@@ -188,21 +188,21 @@ export function RosterEntry({
         <section className="roster-baseline-section">
           <div className="section-label">
             <Flag size={14} />
-            <h3>Stats At Match</h3>
+            <h3>Stats At Discovery</h3>
           </div>
           <p className="roster-detail-note">
-            This Smartcrush&apos;s stats when you first swiped on em.
+            Snapshot from when this wallet was added to your swipe deck.
           </p>
           <div className="roster-baseline-metrics">
             <div>
               <span>
-                Win rate <small>at matching</small>
+                Win rate <small>at discovery</small>
               </span>
               <strong>{percent(wallet.winRate)}</strong>
             </div>
             <div>
               <span>
-                Realized P&amp;L <small>at matching</small>
+                Realized P&amp;L <small>at discovery</small>
               </span>
               <strong
                 className={wallet.realizedPnlUsd >= 0 ? "profit" : "loss"}
@@ -218,7 +218,8 @@ export function RosterEntry({
             <h3>Greatest Hits</h3>
           </div>
           <p className="roster-detail-note">
-            This Smartcrush&apos;s historical wins when you first swiped on em.
+            Historical wins captured when this wallet was added to your swipe
+            deck.
           </p>
           {wallet.topTokens.length ? (
             <div className="trophies">

@@ -1,10 +1,12 @@
 import { RotateCcw } from "lucide-react";
 import type { SessionData } from "../types";
 import { relativeTime } from "../utils/formatters";
+import { freshnessLabel } from "../utils/freshness";
 import { SignalCard } from "./SignalCard";
 import { SkeletonCard } from "./SkeletonCard";
 import { EmptyState } from "./EmptyState";
 import { SignalsSummary } from "./SignalsSummary";
+import { recentSignals } from "../utils/signalWindow";
 export function SignalsFeed({
   data,
   loading,
@@ -20,12 +22,20 @@ export function SignalsFeed({
   onScout: () => void;
   onCopy: (s: string) => void;
 }) {
+  const signals = recentSignals(data.signals);
   return (
     <>
       <div className="list-heading roster-list-heading signals-refresh-row">
         <div className="roster-refresh-control">
-          {data.lastPolledAt > 0 && (
-            <span>Updated {relativeTime(data.lastPolledAt)}</span>
+          {data.roster.length > 0 && (
+            <span>
+              {data.signalsRefreshStatus === "partial"
+                ? `Trades checked ${relativeTime(data.signalsUpdatedAt)} · Context incomplete`
+                : freshnessLabel(
+                    data.signalsRefreshStatus,
+                    data.signalsUpdatedAt,
+                  )}
+            </span>
           )}
           <button
             className="roster-text-button"
@@ -37,8 +47,8 @@ export function SignalsFeed({
           </button>
         </div>
       </div>
-      {data.signals.length > 0 && (
-        <SignalsSummary signals={data.signals} onCopy={onCopy} />
+      {signals.length > 0 && (
+        <SignalsSummary signals={signals} onCopy={onCopy} />
       )}
       <div className="feed-heading">
         <span>24H Activity · Updates Hourly</span>
@@ -51,14 +61,14 @@ export function SignalsFeed({
         >
           <p>Add wallets to your roster first to see what they’re up to.</p>
         </EmptyState>
-      ) : loading && !data.signals.length ? (
+      ) : loading && !signals.length ? (
         <>
           <SkeletonCard compact label="Checking in on your matches…" />
           <SkeletonCard compact />
         </>
-      ) : data.signals.length ? (
+      ) : signals.length ? (
         <div className="signals-list">
-          {data.signals.map((s) => (
+          {signals.map((s) => (
             <SignalCard
               key={s.id}
               signal={s}
@@ -70,13 +80,19 @@ export function SignalsFeed({
         </div>
       ) : (
         <EmptyState title="Playing hard to get.">
-          <p>Your roster’s been quiet. No new moves detected.</p>
+          <p>
+            {data.signalsRefreshStatus === "failed" ||
+            data.signalsRefreshStatus === "idle"
+              ? "Recent activity is unavailable. Try Refresh above."
+              : "Your roster’s been quiet. No new moves detected."}
+          </p>
         </EmptyState>
       )}
       <p className="footnote">
         Context badges are estimates from current holdings and recent swaps;
         transfers can affect them. Updates run while the app is open. Nansen
-        only exposes the last 24 hours; saved signals stay here.
+        only exposes the last 24 hours. Activity older than 24 hours disappears
+        from this view.
       </p>
     </>
   );

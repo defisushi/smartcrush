@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { recentSignals } from "../utils/signalWindow";
 import type {
   Mode,
   RosterUpdate,
@@ -25,14 +26,19 @@ export const emptySession = (): SessionData => ({
   signals: [],
   seenTxHashes: [],
   lastPolledAt: 0,
+  signalsUpdatedAt: 0,
+  signalsRefreshStatus: "idle",
 });
 interface Store {
   mode: Mode | null;
   theme: Theme;
+  onboardingComplete: boolean;
   demo: SessionData;
   live: SessionData;
   setMode: (mode: Mode | null) => void;
   setTheme: (theme: Theme) => void;
+  completeOnboarding: () => void;
+  resetOnboarding: () => void;
   setDeck: (mode: Mode, wallets: WalletProfile[]) => void;
   resetDemoSession: () => void;
   swipe: (
@@ -45,6 +51,7 @@ interface Store {
     mode: Mode,
     signals: Signal[],
     updates: Record<string, RosterUpdate>,
+    tradesFetched?: boolean,
   ) => void;
 }
 const safeStorage = {
@@ -77,10 +84,13 @@ export const useAppStore = create<Store>()(
     (set, get) => ({
       mode: null,
       theme: "light",
+      onboardingComplete: false,
       demo: emptySession(),
       live: emptySession(),
       setMode: (mode) => set({ mode }),
       setTheme: (theme) => set({ theme }),
+      completeOnboarding: () => set({ onboardingComplete: true }),
+      resetOnboarding: () => set({ onboardingComplete: false }),
       setDeck: (mode, deck) =>
         set((state) => {
           const data = state[mode];
@@ -184,7 +194,7 @@ export const useAppStore = create<Store>()(
           else delete nicknames[address.toLowerCase()];
           return { [mode]: { ...state[mode], nicknames } };
         }),
-      applyPoll: (mode, signals, updates) =>
+      applyPoll: (mode, signals, updates, tradesFetched = true) =>
         set((state) => {
           const data = state[mode];
           const addresses = new Set(
@@ -197,20 +207,35 @@ export const useAppStore = create<Store>()(
           );
           for (const s of signals)
             if (addresses.has(s.walletAddress.toLowerCase())) byId.set(s.id, s);
-          const merged = [...byId.values()]
+          const merged = recentSignals([...byId.values()])
             .sort((a, b) => b.timestamp.localeCompare(a.timestamp))
             .slice(0, 1000);
+          const contextComplete = data.roster.every((r) => {
+            const update = updates[r.wallet.address];
+            return (
+              update?.addedAt === r.addedAt && Array.isArray(update.holdings)
+            );
+          });
           return {
             [mode]: {
               ...data,
               signals: merged,
               seenTxHashes: merged.map((s) => s.id),
               lastPolledAt: Date.now(),
+              signalsUpdatedAt: tradesFetched
+                ? Date.now()
+                : data.signalsUpdatedAt,
+              signalsRefreshStatus: !tradesFetched
+                ? "failed"
+                : contextComplete
+                  ? "complete"
+                  : "partial",
               roster: data.roster.map((r) => {
                 const update = updates[r.wallet.address];
                 // A response from an earlier match must never update a rematched wallet.
                 if (!update || update.addedAt !== r.addedAt) return r;
                 const next = { ...r };
+                next.performanceError = !update.performance;
                 if (update.performance) {
                   next.pnlSinceAdded = update.performance.pnl;
                   next.winRateSinceAdded = update.performance.winRate;
@@ -236,31 +261,60 @@ export const useAppStore = create<Store>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 3,
-      migrate: (persisted) => {
+      version: 6,
+      migrate: (persisted, version) => {
         const state = persisted as Pick<
           Store,
-          "mode" | "theme" | "demo" | "live"
+          "mode" | "theme" | "onboardingComplete" | "demo" | "live"
         > & {
           theme?: Theme;
+          onboardingComplete?: boolean;
         };
         if (state.theme !== "light" && state.theme !== "dark") {
           state.theme = "light";
+        }
+        if (typeof state.onboardingComplete !== "boolean") {
+          // Returning users who already have a mode skip the new welcome screen.
+          state.onboardingComplete =
+            state.mode === "demo" || state.mode === "live";
         }
         for (const mode of ["demo", "live"] as const) {
           state[mode] = {
             ...emptySession(),
             ...state[mode],
+            // Older caches can contain overwritten swap legs and invented $0 values.
+            // Re-fetch the recent window while retaining the roster and preferences.
+            signals: version < 5 ? [] : state[mode]?.signals || [],
+            seenTxHashes: version < 5 ? [] : state[mode]?.seenTxHashes || [],
+            signalsUpdatedAt: 0,
+            signalsRefreshStatus: "idle",
             lastPolledAt: 0,
-            roster: (state[mode]?.roster || []).map((entry) => ({
-              ...entry,
-              pnlSinceAdded: null,
-              pnlUpdatedAt: null,
-              winRateSinceAdded: null,
-              salesSinceAdded: null,
-              holdingsUpdatedAt: null,
-              holdingsError: false,
-            })),
+            roster:
+              version >= 4
+                ? state[mode]?.roster || []
+                : (state[mode]?.roster || []).map((entry) => ({
+                    ...entry,
+                    pnlSinceAdded: null,
+                    pnlUpdatedAt: null,
+                    winRateSinceAdded: null,
+                    salesSinceAdded: null,
+                    holdingsUpdatedAt: null,
+                    holdingsError: false,
+                  })),
+          };
+        }
+        return state;
+      },
+      merge: (persisted, current) => {
+        const saved = persisted as Partial<Store>;
+        const state = { ...current, ...saved };
+        for (const mode of ["demo", "live"] as const) {
+          const signals = recentSignals(state[mode].signals);
+          state[mode] = {
+            ...emptySession(),
+            ...state[mode],
+            signals,
+            seenTxHashes: signals.map((s) => s.id),
           };
         }
         return state;

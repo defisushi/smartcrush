@@ -44,14 +44,22 @@ function Section({
             </div>
             <div className="signals-summary-metric">
               {metric === "net" ? (
-                <strong>{money(row.volumeUsd, true)}</strong>
+                <strong>
+                  {row.volumeUsd === null
+                    ? "Unavailable"
+                    : money(row.volumeUsd, true)}
+                </strong>
               ) : (
                 <>
                   <strong>
                     {row.walletCount}{" "}
                     {row.walletCount === 1 ? "Smartcrush" : "Smartcrushes"}
                   </strong>
-                  <span>{money(row.volumeUsd, true)} volume</span>
+                  <span>
+                    {row.volumeUsd === null
+                      ? "Unavailable"
+                      : `${money(row.volumeUsd, true)} volume`}
+                  </span>
                 </>
               )}
             </div>
@@ -70,7 +78,8 @@ export function SignalsSummary({
   onCopy: (text: string) => void;
 }) {
   const summary = buildSignalsSummary(signals);
-  if (!summaryHasRows(summary)) return null;
+  const incomplete = signals.some((s) => s.amountUsd === null);
+  if (!summaryHasRows(summary) && !incomplete) return null;
   return (
     <div className="signals-summary">
       <div className="signals-summary-grid">
@@ -103,6 +112,11 @@ export function SignalsSummary({
           onCopy={onCopy}
         />
       </div>
+      {incomplete && (
+        <p className="footnote">
+          Net rankings exclude tokens with unavailable trade values.
+        </p>
+      )}
     </div>
   );
 }

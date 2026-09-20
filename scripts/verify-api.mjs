@@ -12,7 +12,8 @@ let requests = [],
   failAuth = true,
   emptyDiscovery = false,
   rosterPolling = false,
-  failPortfolio = false;
+  failPortfolio = false,
+  failTrades = false;
 const timestamp = new Date().toISOString();
 const trade = (n) => ({
   trader_address: address(n),
@@ -45,6 +46,11 @@ await page.route("https://api.nansen.ai/**", async (route) => {
   }
   if (endpoint.endsWith("dex-trades")) {
     if (body.filters.trader_address) rosterPolling = true;
+    if (body.filters.trader_address && failTrades)
+      return route.fulfill({
+        status: 400,
+        json: { message: "Test trades unavailable" },
+      });
     assert.deepEqual(body.chains, ["robinhood"]);
     if (emptyDiscovery)
       return route.fulfill({
@@ -106,6 +112,9 @@ await page.route("https://api.nansen.ai/**", async (route) => {
   });
 });
 await page.goto(process.env.APP_URL || "http://127.0.0.1:5174");
+await page
+  .getByRole("button", { name: "Enter Smartcrush", exact: true })
+  .click();
 await page.getByLabel("Your Nansen API key", { exact: true }).fill("test-key");
 await page.getByRole("button", { name: "Let’s find your type" }).click();
 await expect(page.getByRole("alert")).toContainText("API key wasn’t accepted");
@@ -140,6 +149,9 @@ await expect(page.locator(".roster-details .token-chips")).toContainText(
   "FRESH",
 );
 await expect(page.locator(".roster-details .trophies")).toContainText("142×");
+await expect(page.locator(".roster-baseline-section")).toContainText(
+  "Stats At Discovery",
+);
 failPortfolio = true;
 await page.getByRole("button", { name: "Refresh roster", exact: true }).click();
 await expect(
@@ -149,12 +161,35 @@ await expect(page.locator(".roster-performance")).toContainText("25%");
 await expect(page.getByRole("alert")).toContainText(
   "Some trades, holdings or performance figures couldn’t be refreshed.",
 );
-await expect(page.locator(".roster-refresh-control")).toContainText("Updated");
+await expect(page.locator(".roster-refresh-control")).toContainText(
+  "Refresh failed",
+);
 await expect(page.locator(".roster-details .token-chips")).toContainText(
   "FRESH",
 );
-failPortfolio = false;
 await page.getByRole("button", { name: "Signals", exact: true }).click();
+await expect(page.locator(".roster-refresh-control")).toContainText(
+  "Context incomplete",
+);
+failTrades = true;
+await page.getByRole("button", { name: "Refresh signals" }).click();
+await expect(
+  page.getByRole("button", { name: "Refresh signals" }),
+).toBeEnabled();
+await expect(page.locator(".roster-refresh-control")).toContainText(
+  "Refresh failed",
+);
+await expect(page.locator(".roster-refresh-control")).toContainText(
+  "Last checked",
+);
+assert.equal(await page.locator(".signal-card").count(), 1);
+const overflow = await page
+  .locator(".main-content")
+  .evaluate((el) => el.scrollWidth > el.clientWidth);
+assert.equal(overflow, false);
+await page.screenshot({ path: "artifacts/signals-failed-refresh.png" });
+failPortfolio = false;
+failTrades = false;
 assert.equal(
   await page
     .getByRole("link", { name: "Copy this trade" })
@@ -166,6 +201,10 @@ await expect(
   page.getByRole("button", { name: "Refresh signals" }),
 ).toBeEnabled();
 assert.equal(await page.locator(".signal-card").count(), 1);
+await expect(page.locator(".roster-refresh-control")).toContainText("Checked");
+await expect(page.locator(".roster-refresh-control")).not.toContainText(
+  "failed",
+);
 const saved = await page.evaluate(() => localStorage.getItem("smart-crush-v1"));
 assert.ok(!saved.includes("test-key"));
 await page.reload();

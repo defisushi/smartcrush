@@ -11,7 +11,7 @@ import { dexLink } from "../services/signals";
 const contexts = {
   new_position: "New position",
   adding: "Adding more",
-  taking_profit: "Taking profit",
+  taking_profit: "Reducing position",
   full_exit: "Full exit",
   unknown: "I don't know actually…",
 };
@@ -85,7 +85,9 @@ export function SignalCard({
           <h3>{tokenSymbol}</h3>
         </div>
         <div className="trade-amount">
-          <strong>{money(s.amountUsd)}</strong>
+          <strong>
+            {s.amountUsd === null ? "Unavailable" : money(s.amountUsd)}
+          </strong>
           <span>
             {s.quantity === null
               ? "Quantity unavailable"

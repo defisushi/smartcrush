@@ -10,6 +10,9 @@ const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
 await page.goto(process.env.APP_URL || "http://127.0.0.1:5174");
 await page
+  .getByRole("button", { name: "Enter Smartcrush", exact: true })
+  .click();
+await page
   .getByRole("button", { name: "Take a peek with demo wallets" })
   .click();
 await page.getByRole("button", { name: "Match with this wallet" }).waitFor();
@@ -69,7 +72,7 @@ assert.ok(
   (await page.getByRole("dialog").innerText()).includes("Your roster is full"),
 );
 await page.getByRole("button", { name: "Make room in my roster" }).click();
-await expect(page.locator(".roster-refresh-control")).toContainText("Updated");
+await expect(page.locator(".roster-refresh-control")).toContainText("Checked");
 // Compare rendered order to stored exact values for both metrics and directions.
 for (const metric of ["pnl", "winRate"]) {
   await page
@@ -201,6 +204,7 @@ const mobile = await browser.newContext({
 });
 const mp = await mobile.newPage();
 await mp.goto(process.env.APP_URL || "http://127.0.0.1:5174");
+await mp.getByRole("button", { name: "Enter Smartcrush", exact: true }).click();
 await mp.screenshot({ path: "artifacts/setup-mobile.png" });
 await mp.getByRole("button", { name: "Take a peek with demo wallets" }).click();
 await mp.getByRole("button", { name: "Match with this wallet" }).waitFor();

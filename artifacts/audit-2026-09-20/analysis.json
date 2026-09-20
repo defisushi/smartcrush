@@ -1,0 +1,178 @@
+{
+  "sampleDisplays": [
+    {
+      "address": "0xfd7081fd01e6db24107e04b76a25fced7c46ac41",
+      "summaryRequestedAt": "2026-09-19T20:25:14.983Z",
+      "display": {
+        "winRate": "41%",
+        "realizedPnl": "+$241.0K",
+        "topTokens": [
+          {
+            "symbol": "PONS",
+            "multiple": "2.1×"
+          },
+          {
+            "symbol": "DELTA",
+            "multiple": "1.9×"
+          },
+          {
+            "symbol": "ETH",
+            "multiple": "1×"
+          }
+        ],
+        "holdings": [
+          "ETH",
+          "PONS",
+          "DELTA",
+          "COOK"
+        ]
+      }
+    },
+    {
+      "address": "0x9fc71adf531476bcf08fcd31e6eff5f52c2f9daf",
+      "summaryRequestedAt": "2026-09-19T20:25:17.847Z",
+      "display": {
+        "winRate": "26%",
+        "realizedPnl": "+$208.3K",
+        "topTokens": [
+          {
+            "symbol": "QUOTRON",
+            "multiple": "29.8×"
+          },
+          {
+            "symbol": "NAVEN",
+            "multiple": "8.5×"
+          },
+          {
+            "symbol": "FLAMINGO",
+            "multiple": "8.3×"
+          }
+        ],
+        "holdings": [
+          "QUOTRON",
+          "VLAD",
+          "ETH",
+          "FLOCK"
+        ]
+      }
+    }
+  ],
+  "liveReplay": {
+    "rawTrades": 9,
+    "signals": [
+      {
+        "id": "0xbb155370b910a466ca059b7e2485900c40d466a441b056f48c589c44fffb09c9:0xfd7081fd01e6db24107e04b76a25fced7c46ac41:sell:0x39dbed3a2bd333467115de45665cc57f813c4571",
+        "walletAddress": "0xfd7081fd01e6db24107e04b76a25fced7c46ac41",
+        "walletLabel": null,
+        "action": "sell",
+        "tokenAddress": "0x39dbed3a2bd333467115de45665cc57f813c4571",
+        "tokenSymbol": "PONS",
+        "amountUsd": 71530.23456979425,
+        "quantity": 124621.86894626671,
+        "timestamp": "2026-09-19T16:07:39Z",
+        "txHash": "0xbb155370b910a466ca059b7e2485900c40d466a441b056f48c589c44fffb09c9",
+        "contextBadge": "taking_profit"
+      },
+      {
+        "id": "0xa2b4761bce4fb0c93b1e326c8fe2b999c2e39c48f74f9f8d33b0a401855b3846:0xfd7081fd01e6db24107e04b76a25fced7c46ac41:sell:0x39dbed3a2bd333467115de45665cc57f813c4571",
+        "walletAddress": "0xfd7081fd01e6db24107e04b76a25fced7c46ac41",
+        "walletLabel": null,
+        "action": "sell",
+        "tokenAddress": "0x39dbed3a2bd333467115de45665cc57f813c4571",
+        "tokenSymbol": "PONS",
+        "amountUsd": 123405.31050081376,
+        "quantity": 215000,
+        "timestamp": "2026-09-19T10:57:40Z",
+        "txHash": "0xa2b4761bce4fb0c93b1e326c8fe2b999c2e39c48f74f9f8d33b0a401855b3846",
+        "contextBadge": "taking_profit"
+      },
+      {
+        "id": "0x67e4e4a3476c8b8585229ca974f573ad770fa7f58ccccf515c25d7f7239bc1ab:0x9fc71adf531476bcf08fcd31e6eff5f52c2f9daf:sell:0xaa07a0e9209e16ac99708c3ec70159c6ef3128a3",
+        "walletAddress": "0x9fc71adf531476bcf08fcd31e6eff5f52c2f9daf",
+        "walletLabel": null,
+        "action": "sell",
+        "tokenAddress": "0xaa07a0e9209e16ac99708c3ec70159c6ef3128a3",
+        "tokenSymbol": "ORBIO",
+        "amountUsd": 5400.943822462084,
+        "quantity": 92870.93852613549,
+        "timestamp": "2026-09-19T02:44:47Z",
+        "txHash": "0x67e4e4a3476c8b8585229ca974f573ad770fa7f58ccccf515c25d7f7239bc1ab",
+        "contextBadge": "full_exit"
+      },
+      {
+        "id": "0xa811cc793f11b6dc3058c31a1f34c71b8b8aa29792b2c5df9b8eb61d39e269be:0x9fc71adf531476bcf08fcd31e6eff5f52c2f9daf:buy:0xaa07a0e9209e16ac99708c3ec70159c6ef3128a3",
+        "walletAddress": "0x9fc71adf531476bcf08fcd31e6eff5f52c2f9daf",
+        "walletLabel": null,
+        "action": "buy",
+        "tokenAddress": "0xaa07a0e9209e16ac99708c3ec70159c6ef3128a3",
+        "tokenSymbol": "ORBIO",
+        "amountUsd": 4994.29103746283,
+        "quantity": 92870.93852613549,
+        "timestamp": "2026-09-19T02:42:25Z",
+        "txHash": "0xa811cc793f11b6dc3058c31a1f34c71b8b8aa29792b2c5df9b8eb61d39e269be",
+        "contextBadge": "new_position"
+      }
+    ],
+    "summary": {
+      "topNetBuys": [],
+      "topNetSells": [
+        {
+          "tokenAddress": "0x39dbed3a2bd333467115de45665cc57f813c4571",
+          "tokenSymbol": "PONS",
+          "volumeUsd": 194935.54507060803,
+          "walletCount": 1
+        },
+        {
+          "tokenAddress": "0xaa07a0e9209e16ac99708c3ec70159c6ef3128a3",
+          "tokenSymbol": "ORBIO",
+          "volumeUsd": 406.65278499925444,
+          "walletCount": 1
+        }
+      ],
+      "topBuyOverlap": [],
+      "topSellOverlap": []
+    }
+  },
+  "reproductions": {
+    "sameTokenDifferentQuoteLegs": {
+      "expectedQuantity": 30,
+      "actualQuantity": 20,
+      "expectedUsd": 300,
+      "actualUsd": 200
+    },
+    "missingUsd": {
+      "input": null,
+      "displayedUsd": 0
+    },
+    "partialSaleAtAssumedLoss": {
+      "badge": "taking_profit",
+      "scenario": "10 tokens sold at $5; remaining tokens valued at $5 with -50% unrealized ROI. No sale cost basis is consulted."
+    },
+    "ethStableSwap": {
+      "emittedSignals": 0
+    },
+    "oldSignalsInSummary": {
+      "oldBuyAgeHours": 48,
+      "oldBuyUsd": 10000,
+      "currentSellUsd": 100,
+      "result": {
+        "topNetBuys": [
+          {
+            "tokenAddress": "0x0000000000000000000000000000000000000002",
+            "tokenSymbol": "TEST",
+            "volumeUsd": 9900,
+            "walletCount": 1
+          }
+        ],
+        "topNetSells": [],
+        "topBuyOverlap": [],
+        "topSellOverlap": []
+      }
+    },
+    "failedRefresh": {
+      "lastPolledAt": 1789886688073,
+      "pnlUpdatedAt": 2,
+      "retainedOldSignals": 1
+    }
+  }
+}

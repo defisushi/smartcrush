@@ -49,7 +49,7 @@ export function SwipeCard({
       <div className="profile-cover">
         <ProfileArt seed={index} />
         <span className="cover-tag">
-          <span /> ACTIVE IN THE LAST 24H
+          <span /> ACTIVE IN 24H BEFORE DISCOVERY
         </span>
       </div>
       <div className="profile-body">

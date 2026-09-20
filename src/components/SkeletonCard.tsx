@@ -16,17 +16,21 @@ export function SkeletonCard({
     : 0;
   return (
     <div
-      className={`skeleton-card ${compact ? "compact" : ""}`}
+      className={`skeleton-card ${compact ? "compact" : ""} ${showHeart ? "match-search" : ""}`}
       role="status"
       aria-label={label}
       aria-valuemin={showHeart ? 0 : undefined}
       aria-valuemax={showHeart ? progressMax : undefined}
       aria-valuenow={showHeart ? progress : undefined}
     >
-      <div className="skeleton hero" />
-      <div className="skeleton line" />
-      <div className="skeleton line short" />
-      <div className="skeleton block" />
+      {!showHeart && (
+        <>
+          <div className="skeleton hero" />
+          <div className="skeleton line" />
+          <div className="skeleton line short" />
+          <div className="skeleton block" />
+        </>
+      )}
       {showHeart && (
         <div className="loading-heart" aria-hidden="true">
           <Heart className="loading-heart-empty" strokeWidth={1.75} />

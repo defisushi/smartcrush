@@ -1371,12 +1371,22 @@ button svg {
   text-align: center;
   margin: 14px 0 10px;
 }
+.skeleton-card.match-search {
+  min-height: 456px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.match-search > p {
+  margin: 14px 0 0;
+}
 
 .loading-heart {
   position: relative;
   width: 52px;
   height: 52px;
-  margin: 22px auto 0;
+  margin: 0 auto;
 }
 .loading-heart-empty,
 .loading-heart-full {
@@ -2362,12 +2372,16 @@ body {
 .roster-refresh-control {
   display: flex;
   align-items: center;
+  min-width: 0;
   gap: 7px;
 }
 .roster-refresh-control > span {
   font-size: 9px;
   color: var(--muted);
-  white-space: nowrap;
+  white-space: normal;
+}
+.roster-refresh-control > button {
+  flex-shrink: 0;
 }
 .roster-disclosure {
   min-height: 32px;
@@ -2827,4 +2841,129 @@ input::placeholder {
 .app-frame[data-theme="dark"] .key-note,
 .app-frame[data-theme="dark"] .demo-disclosure {
   color: var(--muted);
+}
+
+/* === Welcome / onboarding landing === */
+.main-content:has(.welcome) {
+  display: flex;
+  padding: 0;
+  background: var(--paper);
+}
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 36px 22px 40px;
+  min-height: 100%;
+  width: 100%;
+  flex: 1;
+  justify-content: center;
+  background: var(--paper);
+  color: var(--ink);
+  box-sizing: border-box;
+}
+.welcome-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.welcome-mark {
+  width: 56px;
+  height: 58px;
+  border-radius: 16px;
+  margin-right: 0;
+  transform: rotate(-8deg);
+}
+.welcome-wordmark {
+  font-size: 34px;
+  letter-spacing: -1.8px;
+}
+.welcome-wordmark i {
+  font-size: 11px;
+}
+.welcome-tagline {
+  margin: 0 0 72px;
+  max-width: 280px;
+  font-size: 12px;
+  line-height: 1.55;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: center;
+}
+.welcome-eyebrow {
+  margin: 0 0 16px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: var(--muted);
+}
+.welcome-title {
+  margin: 0 0 28px;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -1.2px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.welcome-title em {
+  color: var(--coral);
+  font-style: normal;
+}
+.welcome-steps {
+  list-style: none;
+  margin: 0 0 76px;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+.welcome-steps li {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: baseline;
+  padding: 14px 14px;
+  border-radius: 14px;
+  background: var(--card, #fff);
+  border: 1px solid var(--line, var(--border-strong, #cbb58e));
+}
+.welcome-step-num {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--coral);
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  min-width: 0.9em;
+}
+.welcome-step-copy {
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.welcome-cta {
+  width: 100%;
+  max-width: 320px;
+}
+.welcome-footnote {
+  margin: 18px 0 0;
+  max-width: 300px;
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: center;
+}
+
+.app-frame[data-theme="dark"] .welcome-steps li {
+  background: var(--card);
+  border-color: var(--line);
 }

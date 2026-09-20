@@ -107,7 +107,7 @@ function trade(overrides: Partial<RawTrade> = {}): RawTrade {
     token_bought_amount: 10,
     token_sold_amount: 100,
     trade_value_usd: 100,
-    block_timestamp: "2026-09-18T10:00:00Z",
+    block_timestamp: new Date(Date.now() - 3600000).toISOString(),
     transaction_hash: "0xabc",
     ...overrides,
   };
@@ -167,7 +167,7 @@ describe("signal interpretation", () => {
         token_bought_address: demoAddress(101),
         token_sold_address: demoAddress(100),
         token_sold_amount: 4,
-        block_timestamp: "2026-09-18T11:00:00Z",
+        block_timestamp: new Date(Date.now() - 1800000).toISOString(),
         transaction_hash: "0xdef",
       }),
     ];

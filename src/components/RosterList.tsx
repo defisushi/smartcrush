@@ -6,7 +6,7 @@ import { EmptyState } from "./EmptyState";
 import { RosterCapacity } from "./RosterCapacity";
 import { RosterDropdown } from "./RosterDropdown";
 import { NicknameModal } from "./NicknameModal";
-import { relativeTime } from "../utils/formatters";
+import { freshnessLabel, rosterFreshness } from "../utils/freshness";
 import {
   sortRoster,
   type RosterSort,
@@ -37,10 +37,7 @@ export function RosterList({
   const [naming, setNaming] = useState<string | null>(null);
   const closeNickname = useCallback(() => setNaming(null), []);
   const sorted = sortRoster(roster, metric, direction);
-  const lastUpdatedAt = roster.reduce(
-    (latest, entry) => Math.max(latest, entry.pnlUpdatedAt ?? 0),
-    0,
-  );
+  const freshness = rosterFreshness(roster);
   return (
     <>
       <div className="roster-page-capacity">
@@ -72,9 +69,9 @@ export function RosterList({
           </div>
           <div className="list-heading roster-list-heading">
             <div className="roster-refresh-control">
-              {lastUpdatedAt > 0 && (
-                <span>Updated {relativeTime(lastUpdatedAt)}</span>
-              )}
+              <span>
+                {freshnessLabel(freshness.status, freshness.checkedAt)}
+              </span>
               <button
                 className="roster-text-button"
                 onClick={onRefresh}

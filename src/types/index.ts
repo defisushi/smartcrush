@@ -35,6 +35,7 @@ export interface RosterEntry {
   salesSinceAdded: number | null;
   holdingsUpdatedAt: number | null;
   holdingsError: boolean;
+  performanceError?: boolean;
 }
 export interface RosterUpdate {
   addedAt: number;
@@ -51,7 +52,7 @@ export interface Signal {
   action: "buy" | "sell";
   tokenSymbol: string;
   tokenAddress: string;
-  amountUsd: number;
+  amountUsd: number | null;
   quantity: number | null;
   timestamp: string;
   txHash: string;
@@ -68,7 +69,10 @@ export interface SessionData {
   signals: Signal[];
   seenTxHashes: string[];
   lastPolledAt: number;
+  signalsUpdatedAt: number;
+  signalsRefreshStatus: RefreshStatus;
 }
+export type RefreshStatus = "idle" | "complete" | "partial" | "failed";
 export interface RawTrade {
   trader_address: string;
   trader_address_label?: string;
@@ -76,9 +80,9 @@ export interface RawTrade {
   token_sold_symbol: string;
   token_bought_address: string;
   token_sold_address: string;
-  token_bought_amount?: number;
-  token_sold_amount?: number;
-  trade_value_usd: number;
+  token_bought_amount?: number | null;
+  token_sold_amount?: number | null;
+  trade_value_usd?: number | null;
   block_timestamp: string;
   transaction_hash: string;
 }
