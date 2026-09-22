@@ -34,7 +34,7 @@ body {
   margin: 0;
   display: flex;
   justify-content: center;
-  min-width: 390px;
+  min-width: 0;
   min-height: 100vh;
 }
 button,
@@ -73,11 +73,11 @@ button svg {
   flex-shrink: 0;
 }
 #root {
-  width: 390px;
+  width: min(100%, 390px);
 }
 .app-frame {
-  width: 390px;
-  min-width: 390px;
+  width: 100%;
+  min-width: 0;
   max-width: 390px;
   height: 100vh;
   height: 100dvh;
@@ -441,9 +441,11 @@ button svg {
   transform: scale(0.9);
 }
 .wallet-label {
-  font-size: 9px;
-  margin: 5px 0 10px;
-  color: var(--muted);
+  font-size: 13px;
+  margin: 3px 0 10px;
+  color: var(--secondary-ink);
+  font-weight: 600;
+  overflow-wrap: anywhere;
 }
 .profile-stats {
   display: grid;
@@ -493,7 +495,7 @@ button svg {
 .section-label h3 {
   margin: 0;
   color: var(--secondary-ink);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
 }
 .section-label > span {
@@ -566,6 +568,10 @@ button svg {
   justify-content: center;
   gap: 16px;
   padding-top: 19px;
+}
+.swipe-actions.actions-hidden {
+  visibility: hidden;
+  pointer-events: none;
 }
 .swipe-actions > span {
   display: flex;
@@ -1950,7 +1956,6 @@ body {
   letter-spacing: 0.65px;
 }
 
-.wallet-label,
 .profile-stats > div > span,
 .token-chip,
 .swipe-bottom {
@@ -2966,4 +2971,188 @@ input::placeholder {
 .app-frame[data-theme="dark"] .welcome-steps li {
   background: var(--card);
   border-color: var(--line);
+}
+
+/* Only the swipe screen locks to the available viewport. The cover flexes
+   while the profile details scroll inside their own expanded panel. */
+.swipe-locked {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 12px;
+}
+.swipe-locked > * {
+  flex-shrink: 0;
+}
+.swipe-locked .card-stack {
+  flex: 1 1 400px;
+  min-height: 0;
+  max-height: 400px;
+}
+.swipe-locked .draggable-card,
+.swipe-locked .wallet-card {
+  height: 100%;
+}
+.swipe-locked .wallet-card {
+  display: flex;
+  flex-direction: column;
+}
+.swipe-locked .profile-cover {
+  flex: 0 0 33%;
+  min-height: 0;
+}
+.swipe-locked .profile-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.swipe-locked .profile-cover .heart-sculpture svg {
+  height: 70px;
+  width: 70px;
+}
+.swipe-locked .profile-cover .art-orbit {
+  width: 160px;
+  height: 60px;
+}
+.swipe-locked .profile-cover .art-orbit.second {
+  width: 130px;
+  height: 75px;
+}
+/* Motion supplies inline pan-y for drag="x"; card mode must suppress it. */
+.draggable-card[data-expanded="false"] {
+  touch-action: none !important;
+}
+.swipe-locked .wallet-card .wallet-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.swipe-locked .swipe-bottom {
+  padding-top: 22px;
+}
+.swipe-locked .skeleton-card.match-search {
+  flex: 1;
+  min-height: 0;
+  max-height: 400px;
+}
+.tap-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  border: 0;
+  background: none;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  padding: 12px 0 4px;
+  min-height: 32px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.swipe-locked .hits-section {
+  margin-top: 16px;
+}
+.swipe-locked .tap-hint {
+  margin-top: 16px;
+}
+.wallet-profile-expanded {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: auto;
+  user-select: text;
+}
+.expanded-header {
+  flex-shrink: 0;
+  padding: 14px 16px 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.expanded-identity {
+  flex: 1;
+  min-width: 0;
+}
+.expanded-identity .wallet-label {
+  margin-bottom: 0;
+}
+.expanded-close {
+  margin-left: auto;
+  background: none;
+  border: 0;
+  color: var(--secondary-ink);
+  min-width: 36px;
+  min-height: 36px;
+  padding: 4px;
+  display: grid;
+  place-items: center;
+}
+.expanded-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding: 12px 16px 16px;
+  -webkit-overflow-scrolling: touch;
+}
+.expanded-body:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -3px;
+}
+@media (max-height: 740px) {
+  .swipe-locked .page-heading {
+    padding: 8px 0;
+  }
+  .swipe-locked .page-heading h1 {
+    font-size: 28px;
+    margin-bottom: 5px;
+  }
+  .swipe-locked .page-heading > div > p:last-child {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .swipe-locked .deck-meta {
+    margin-bottom: 8px;
+  }
+  .swipe-locked .swipe-actions {
+    padding-top: 14px;
+    gap: 12px;
+  }
+  .swipe-locked .swipe-button {
+    width: 48px;
+    height: 48px;
+  }
+  .swipe-locked .swipe-bottom {
+    padding-top: 10px;
+  }
+  .swipe-locked .empty-state {
+    padding: 12px 10px;
+  }
+  .swipe-locked .empty-art {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 12px;
+  }
+  .swipe-locked .profile-body {
+    padding: 10px 14px 6px;
+  }
+  .swipe-locked .wallet-card .trophy {
+    padding-block: 6px;
+  }
+  .swipe-locked .swipe-roster-note {
+    gap: 4px;
+  }
+  .swipe-locked .profile-cover .heart-sculpture {
+    left: 75%;
+    transform: translate(-50%, -47%) rotate(-12deg) scale(0.5);
+  }
 }

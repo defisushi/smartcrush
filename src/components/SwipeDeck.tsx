@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   motion,
   useAnimationControls,
@@ -24,6 +24,9 @@ function DraggableCard({
   onCopy: (address: string) => void;
 }) {
   const [busy, setBusy] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const dragged = useRef(false);
+  const pointerStart = useRef({ x: 0, y: 0 });
   const x = useMotionValue(0),
     rotate = useTransform(x, [-200, 0, 200], [-13, 0, 13]);
   const passOpacity = useTransform(x, [-90, -20], [1, 0]),
@@ -31,7 +34,7 @@ function DraggableCard({
   const controls = useAnimationControls(),
     reduced = useReducedMotion();
   const doSwipe = async (direction: "left" | "right") => {
-    if (busy) return;
+    if (busy || expanded) return;
     if (direction === "right" && data.roster.length >= 10) {
       void controls.start({ x: 0, rotate: 0 });
       onFull();
@@ -51,8 +54,26 @@ function DraggableCard({
         <div className="behind-card" />
         <motion.div
           className="draggable-card"
-          style={{ x, rotate, touchAction: "pan-y" }}
-          drag="x"
+          data-expanded={expanded}
+          style={{ x, rotate, touchAction: expanded ? "pan-y" : "none" }}
+          drag={expanded || busy ? false : "x"}
+          onPointerDownCapture={(event) => {
+            dragged.current = false;
+            pointerStart.current = { x: event.clientX, y: event.clientY };
+          }}
+          onPointerMoveCapture={(event) => {
+            if (
+              Math.abs(event.clientX - pointerStart.current.x) >= 10 ||
+              Math.abs(event.clientY - pointerStart.current.y) >= 10
+            )
+              dragged.current = true;
+          }}
+          onPointerCancel={() => {
+            dragged.current = true;
+          }}
+          onDragStart={() => {
+            dragged.current = true;
+          }}
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.85}
           dragMomentum={false}
@@ -67,45 +88,57 @@ function DraggableCard({
             wallet={data.deck[data.deckPosition]}
             index={data.deckPosition}
             onCopy={onCopy}
+            expanded={expanded}
+            onExpand={(fromKeyboard = false) => {
+              if (busy || (dragged.current && !fromKeyboard)) return;
+              controls.stop();
+              x.set(0);
+              setExpanded(true);
+            }}
+            onCollapse={() => setExpanded(false)}
           />
-          <motion.div
-            className="swipe-stamp pass-stamp"
-            style={{ opacity: passOpacity }}
-          >
-            PASS
-          </motion.div>
-          <motion.div
-            className="swipe-stamp match-stamp"
-            style={{ opacity: matchOpacity }}
-          >
-            MATCH ♥
-          </motion.div>
+          {!expanded && (
+            <>
+              <motion.div
+                className="swipe-stamp pass-stamp"
+                style={{ opacity: passOpacity }}
+              >
+                PASS
+              </motion.div>
+              <motion.div
+                className="swipe-stamp match-stamp"
+                style={{ opacity: matchOpacity }}
+              >
+                MATCH ♥
+              </motion.div>
+            </>
+          )}
         </motion.div>
       </div>
-      <div className="swipe-actions">
-        <span>
-          <ArrowLeft size={12} /> NOT MY TYPE
-        </span>
-        <button
-          className="swipe-button pass-button"
-          aria-label="Pass on this wallet"
-          disabled={busy}
-          onClick={() => void doSwipe("left")}
-        >
-          <X size={27} />
-        </button>
-        <button
-          className="swipe-button match-button"
-          aria-label="Match with this wallet"
-          disabled={busy}
-          onClick={() => void doSwipe("right")}
-        >
-          <Heart size={27} fill="currentColor" />
-        </button>
-        <span>
-          MY TYPE <ArrowRight size={12} />
-        </span>
-      </div>
+      <div className={`swipe-actions${expanded ? ' actions-hidden' : ''}`}>
+          <span>
+            <ArrowLeft size={12} /> NOT MY TYPE
+          </span>
+          <button
+            className="swipe-button pass-button"
+            aria-label="Pass on this wallet"
+            disabled={busy}
+            onClick={() => void doSwipe("left")}
+          >
+            <X size={27} />
+          </button>
+          <button
+            className="swipe-button match-button"
+            aria-label="Match with this wallet"
+            disabled={busy}
+            onClick={() => void doSwipe("right")}
+          >
+            <Heart size={27} fill="currentColor" />
+          </button>
+          <span>
+            MY TYPE <ArrowRight size={12} />
+          </span>
+        </div>
     </>
   );
 }

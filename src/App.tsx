@@ -419,7 +419,11 @@ export default function App() {
           )}
         </div>
       )}
-      <main className="main-content" ref={main} id="main-content">
+      <main
+        className={`main-content${tab === "swipe" && ready && !showWelcome ? " swipe-locked" : ""}`}
+        ref={main}
+        id="main-content"
+      >
         {showWelcome ? (
           <Welcome
             onContinue={() => {
@@ -453,7 +457,7 @@ export default function App() {
                   <h1>
                     {tab === "swipe" ? (
                       <>
-                        Find My <em>Smartcrush</em>
+                        Swipe A <em>Smartcrush</em>
                       </>
                     ) : tab === "roster" ? (
                       <>
