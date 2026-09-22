@@ -43,7 +43,7 @@ const feed = (data: SessionData) =>
       loading={false}
       demo
       onRefresh={() => {}}
-      onScout={() => {}}
+      onSwipe={() => {}}
       onCopy={() => {}}
     />,
   );

@@ -32,7 +32,7 @@ describe("display formatting", () => {
     );
   });
 });
-describe("scouting and roster lifecycle", () => {
+describe("swiping and roster lifecycle", () => {
   it("holds the eleventh card when full, then resumes after a breakup", () => {
     useAppStore.getState().setDeck("demo", demoDeck().slice(0, 20));
     for (let i = 0; i < 10; i++)

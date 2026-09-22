@@ -19,7 +19,7 @@ export function RosterList({
   onRefresh,
   onNickname,
   onCopy,
-  onScout,
+  onSwipe,
   onBreakUp,
 }: {
   roster: Entry[];
@@ -28,7 +28,7 @@ export function RosterList({
   onRefresh: () => void;
   onNickname: (address: string, nickname: string) => void;
   onCopy: (address: string) => void;
-  onScout: () => void;
+  onSwipe: () => void;
   onBreakUp: (address: string) => void;
 }) {
   const [metric, setMetric] = useState<RosterSort>("pnl");
@@ -103,7 +103,7 @@ export function RosterList({
               />
             ))}
           </div>
-          <button className="button add-more" onClick={onScout}>
+          <button className="button add-more" onClick={onSwipe}>
             {roster.length === 10
               ? "Back to Swipe"
               : `There’s still room for ${10 - roster.length} more ${
@@ -115,7 +115,7 @@ export function RosterList({
       ) : (
         <EmptyState title="Still single?">
           <p>Start swiping to find matches and build your roster!</p>
-          <button className="button primary" onClick={onScout}>
+          <button className="button primary" onClick={onSwipe}>
             Find my first match <Heart size={17} />
           </button>
         </EmptyState>

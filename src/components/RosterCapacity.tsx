@@ -8,8 +8,8 @@ export function RosterCapacity({
   showExplanation?: boolean;
 }) {
   return (
-    <div className="scout-roster-note">
-      <span className="scout-roster-count">Roster: {count}/10</span>
+    <div className="swipe-roster-note">
+      <span className="swipe-roster-count">Roster: {count}/10</span>
       <div
         className="roster-capacity"
         aria-label={`${count} of 10 roster spots filled`}

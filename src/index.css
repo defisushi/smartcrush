@@ -601,7 +601,7 @@ button svg {
     0 5px 16px #f3695925;
   color: #fff5e9;
 }
-.scout-bottom {
+.swipe-bottom {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -609,12 +609,12 @@ button svg {
   color: var(--muted);
   padding: 40px 0 2px;
 }
-.scout-roster-note {
+.swipe-roster-note {
   display: grid;
   justify-items: center;
   gap: 7px;
 }
-.scout-roster-count {
+.swipe-roster-count {
   color: var(--secondary-ink);
   font-size: 12px;
   font-weight: 800;
@@ -633,7 +633,7 @@ button svg {
   color: var(--coral);
   fill: currentColor;
 }
-.scout-roster-note small {
+.swipe-roster-note small {
   font-size: 10px;
   line-height: 1.35;
   color: var(--muted);
@@ -1953,7 +1953,7 @@ body {
 .wallet-label,
 .profile-stats > div > span,
 .token-chip,
-.scout-bottom {
+.swipe-bottom {
   font-size: 9px;
 }
 

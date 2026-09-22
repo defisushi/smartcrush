@@ -40,7 +40,7 @@ import { RosterCapacity } from "./components/RosterCapacity";
 export default function App() {
   const store = useAppStore(),
     { mode, theme, onboardingComplete } = store;
-  const [tab, setTab] = useState<Tab>("scout"),
+  const [tab, setTab] = useState<Tab>("swipe"),
     [keyReady, setKeyReady] = useState(hasApiKey());
   const [settings, setSettings] = useState(false),
     [full, setFull] = useState(false),
@@ -334,7 +334,7 @@ export default function App() {
     setProgress(0);
     store.setMode(next);
     setSettings(false);
-    setTab("scout");
+    setTab("swipe");
     setNow(Date.now());
   };
   const copy = async (text: string, success = "Token address copied.") => {
@@ -352,7 +352,7 @@ export default function App() {
     deckRetryAt.current = 0;
     setDeckError("");
     store.resetDemoSession();
-    setTab("scout");
+    setTab("swipe");
     setNow(Date.now());
     await loadDeck(true);
     setToast("Fresh demo stack ready. Your roster was preserved.");
@@ -369,7 +369,7 @@ export default function App() {
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              setTab("scout");
+              setTab("swipe");
             }}
             aria-label="Smartcrush home"
           >
@@ -451,7 +451,7 @@ export default function App() {
               <div className="page-heading">
                 <div>
                   <h1>
-                    {tab === "scout" ? (
+                    {tab === "swipe" ? (
                       <>
                         Find My <em>Smartcrush</em>
                       </>
@@ -466,7 +466,7 @@ export default function App() {
                     )}
                   </h1>
                   <p>
-                    {tab === "scout"
+                    {tab === "swipe"
                       ? "Swipe on 20 eligible smart wallets, and curate your own ultimate Smartcrush roster. Swipe again every 4 hours!"
                       : tab === "roster"
                         ? "Up to 10 Smartcrushes you're giving your attention to."
@@ -474,15 +474,15 @@ export default function App() {
                   </p>
                 </div>
               </div>
-              {((tab === "scout" && deckError) ||
-                (tab !== "scout" && pollError)) && (
+              {((tab === "swipe" && deckError) ||
+                (tab !== "swipe" && pollError)) && (
                 <div className="error-banner" role="alert">
                   <AlertCircle size={18} />
                   <div>
-                    <p>{tab === "scout" ? deckError : pollError}</p>
+                    <p>{tab === "swipe" ? deckError : pollError}</p>
                     <button
                       onClick={() =>
-                        tab === "scout" ? void loadDeck(true) : void poll(true)
+                        tab === "swipe" ? void loadDeck(true) : void poll(true)
                       }
                     >
                       Try again
@@ -490,7 +490,7 @@ export default function App() {
                   </div>
                 </div>
               )}
-              {tab === "scout" && (
+              {tab === "swipe" && (
                 <>
                   {(!deckError || data.deck.length > 0 || loading) && (
                     <SwipeDeck
@@ -515,7 +515,7 @@ export default function App() {
                       }
                     />
                   )}
-                  <div className="scout-bottom">
+                  <div className="swipe-bottom">
                     <RosterCapacity count={data.roster.length} />
                   </div>
                 </>
@@ -533,7 +533,7 @@ export default function App() {
                   onCopy={(address) =>
                     void copy(address, "Wallet address copied.")
                   }
-                  onScout={() => setTab("scout")}
+                  onSwipe={() => setTab("swipe")}
                   onBreakUp={setBreaking}
                 />
               )}
@@ -543,7 +543,7 @@ export default function App() {
                   loading={polling}
                   demo={mode === "demo"}
                   onRefresh={() => void poll(true)}
-                  onScout={() => setTab("scout")}
+                  onSwipe={() => setTab("swipe")}
                   onCopy={(text) => void copy(text)}
                 />
               )}
@@ -601,7 +601,7 @@ export default function App() {
             setBreaking(null);
             setToast(
               fromFull
-                ? "You’re single again. Go back to scouting!"
+                ? "You’re single again. Go back to swiping!"
                 : "A clean break. There are more wallets in the sea.",
             );
             setFromFull(false);

@@ -40,7 +40,7 @@ export function Connection({
       </p>
       <div className="onboarding-steps">
         <span>
-          <b>01</b> Scout
+          <b>01</b> Swipe
         </span>
         <i>→</i>
         <span>

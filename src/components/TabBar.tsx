@@ -13,7 +13,7 @@ export function TabBar({
     <nav className="tab-bar" aria-label="Main navigation">
       {(
         [
-          ["scout", Heart, "Swipe"],
+          ["swipe", Heart, "Swipe"],
           ["roster", UsersRound, "Roster"],
           ["signals", Zap, "Signals"],
         ] as const

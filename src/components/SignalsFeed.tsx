@@ -12,14 +12,14 @@ export function SignalsFeed({
   loading,
   demo,
   onRefresh,
-  onScout,
+  onSwipe,
   onCopy,
 }: {
   data: SessionData;
   loading: boolean;
   demo: boolean;
   onRefresh: () => void;
-  onScout: () => void;
+  onSwipe: () => void;
   onCopy: (s: string) => void;
 }) {
   const signals = recentSignals(data.signals);
@@ -57,7 +57,7 @@ export function SignalsFeed({
         <EmptyState
           title="Make the first move."
           action="Find a match"
-          onAction={onScout}
+          onAction={onSwipe}
         >
           <p>Add wallets to your roster first to see what they’re up to.</p>
         </EmptyState>

@@ -205,7 +205,7 @@ describe("signal accuracy", () => {
         loading={false}
         demo
         onRefresh={() => {}}
-        onScout={() => {}}
+        onSwipe={() => {}}
         onCopy={() => {}}
       />,
     );
