@@ -116,9 +116,11 @@ export function SwipeCard({
           <span className="cover-tag">
             <span /> ACTIVE IN 24H BEFORE DISCOVERY
           </span>
+          <div className="cover-wallet-info">
+            <WalletHeading wallet={wallet} onCopy={onCopy} />
+          </div>
         </div>
         <div className="profile-body">
-          <WalletHeading wallet={wallet} onCopy={onCopy} />
           <GreatestHits wallet={wallet} />
           <button
             ref={expandButton}

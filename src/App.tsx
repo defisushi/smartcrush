@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   AlertCircle,
-  ArrowUpRight,
   Heart,
-  RotateCcw,
   Settings2,
   X,
 } from "lucide-react";
@@ -345,18 +343,6 @@ export default function App() {
       setToast("Clipboard is unavailable in this browser.");
     }
   };
-  const resetDemoSession = async () => {
-    if (mode !== "demo") return;
-    generation.current++;
-    deckBusy.current = false;
-    deckRetryAt.current = 0;
-    setDeckError("");
-    store.resetDemoSession();
-    setTab("swipe");
-    setNow(Date.now());
-    await loadDeck(true);
-    setToast("Fresh demo stack ready. Your roster was preserved.");
-  };
   const closeSettings = useCallback(() => setSettings(false), []),
     closeFull = useCallback(() => setFull(false), []),
     closeBreakup = useCallback(() => setBreaking(null), []);
@@ -397,28 +383,7 @@ export default function App() {
           </div>
         </header>
       )}
-      {ready && !showWelcome && (
-        <div className={`mode-banner ${mode === "demo" ? "demo" : ""}`}>
-          <span>
-            {mode === "demo"
-              ? "DEMO MODE · FICTIONAL WALLETS"
-              : "ROBINHOOD CHAIN SMART MONEY · POWERED BY NANSEN"}
-          </span>
-          {mode === "demo" && (
-            <div className="mode-banner-actions">
-              <button
-                title="Load 20 fresh demo wallets and keep your roster"
-                onClick={() => void resetDemoSession()}
-              >
-                Reset demo <RotateCcw size={11} />
-              </button>
-              <button onClick={() => setSettings(true)}>
-                Go live <ArrowUpRight size={12} />
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+
       <main
         className={`main-content${tab === "swipe" && ready && !showWelcome ? " swipe-locked" : ""}`}
         ref={main}
