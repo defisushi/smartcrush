@@ -37,7 +37,7 @@ import { MatchModal } from "./components/MatchModal";
 import { RosterCapacity } from "./components/RosterCapacity";
 export default function App() {
   const store = useAppStore(),
-    { mode, theme, onboardingComplete } = store;
+    { mode, onboardingComplete } = store;
   const [tab, setTab] = useState<Tab>("swipe"),
     [keyReady, setKeyReady] = useState(hasApiKey());
   const [settings, setSettings] = useState(false),
@@ -347,7 +347,7 @@ export default function App() {
     closeFull = useCallback(() => setFull(false), []),
     closeBreakup = useCallback(() => setBreaking(null), []);
   return (
-    <AppFrame theme={theme}>
+    <AppFrame>
       {!showWelcome && (
         <header className="app-header">
           <a
@@ -539,13 +539,11 @@ export default function App() {
         <Modal title="Settings" onClose={closeSettings}>
           <SettingsMenu
             mode={mode}
-            theme={theme}
             onModeChange={(next) => {
               if (next === mode) return;
               if (next === "live") switchMode("live", configuredApiKey);
               else switchMode("demo");
             }}
-            onThemeChange={store.setTheme}
           />
         </Modal>
       )}

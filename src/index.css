@@ -2617,7 +2617,7 @@ body {
   margin-bottom: 12px;
 }
 
-/* === Settings menu + dark theme === */
+/* === Settings menu === */
 .settings-menu {
   display: flex;
   flex-direction: column;
@@ -2676,28 +2676,6 @@ body {
 .app-frame {
   color-scheme: light;
   color: var(--ink);
-}
-
-.app-frame[data-theme="dark"] {
-  color-scheme: dark;
-  --paper: #191a18;
-  --ink: #eee7da;
-  --muted: #b2ab9e;
-  --secondary-ink: #c7bfaf;
-  --line: #3b3b33;
-  --border-strong: #6a6253;
-  --green: #80c6a3;
-  --loss: #f19a8e;
-  --card: #242520;
-  --surface-2: #2e2f28;
-  --surface-hover: #393a31;
-  --segment-track: #1c1e19;
-  --segment-active: #3c3d32;
-  --buy-bg: #293d31;
-  --sell-bg: #44302b;
-  --on-action: #291c16;
-  --focus: #f3ae99;
-  --card-shadow: 0 1px 0 #eee7da06 inset, 0 6px 18px #00000024;
 }
 
 .brand-mark,
@@ -2807,71 +2785,6 @@ input::placeholder {
 .match-stamp {
   color: var(--green);
 }
-.app-frame[data-theme="dark"] .mode-banner {
-  background: #242b21;
-  color: #bdc8a6;
-}
-.app-frame[data-theme="dark"] .mode-banner.demo {
-  background: #302721;
-  color: #d4b39a;
-}
-.app-frame[data-theme="dark"] .mode-banner button {
-  color: #f0b69a;
-}
-.app-frame[data-theme="dark"] .chain-pill {
-  background: #293023;
-  border-color: #434b35;
-  color: #c2cf9b;
-}
-.app-frame[data-theme="dark"] .chain-pill > span {
-  background: #abc77d;
-}
-.app-frame[data-theme="dark"] .profile-art::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: #191a1838;
-  pointer-events: none;
-}
-.app-frame[data-theme="dark"] .cover-tag,
-.app-frame[data-theme="dark"] .onboarding-sticker {
-  background: #292d24ed;
-  color: #e1d6b8;
-  border-color: var(--border-strong);
-}
-.app-frame[data-theme="dark"] .roster-capacity {
-  color: #656458;
-}
-.app-frame[data-theme="dark"] .modal-backdrop {
-  background: #080a08b8;
-}
-.app-frame[data-theme="dark"] .toast {
-  background: #343c30;
-  border: 1px solid #58634d;
-}
-.app-frame[data-theme="dark"] .error-banner {
-  background: #3a2924;
-  border-color: #755044;
-  color: #edb9a5;
-}
-.app-frame[data-theme="dark"] .error-banner button {
-  color: #f7c5b3;
-}
-.app-frame[data-theme="dark"] .loading-heart-empty {
-  color: #67483f;
-}
-.app-frame[data-theme="dark"] .onboarding-art {
-  border-color: var(--line);
-}
-.app-frame[data-theme="dark"] .demo-button {
-  color: var(--secondary-ink);
-  border-color: var(--border-strong);
-}
-.app-frame[data-theme="dark"] .key-note,
-.app-frame[data-theme="dark"] .demo-disclosure {
-  color: var(--muted);
-}
-
 /* === Welcome / onboarding landing === */
 .main-content:has(.welcome) {
   display: flex;
@@ -2990,11 +2903,6 @@ input::placeholder {
   font-weight: 500;
   color: var(--muted);
   text-align: center;
-}
-
-.app-frame[data-theme="dark"] .welcome-steps li {
-  background: var(--card);
-  border-color: var(--line);
 }
 
 /* Only the swipe screen locks to the available viewport. The cover flexes

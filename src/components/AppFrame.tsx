@@ -1,15 +1,8 @@
 import type { ReactNode } from "react";
-import type { Theme } from "../types";
 
-export function AppFrame({
-  children,
-  theme = "light",
-}: {
-  children: ReactNode;
-  theme?: Theme;
-}) {
+export function AppFrame({ children }: { children: ReactNode }) {
   return (
-    <div className="app-frame" data-theme={theme}>
+    <div className="app-frame">
       {children}
     </div>
   );

@@ -6,7 +6,6 @@ import type {
   RosterUpdate,
   SessionData,
   Signal,
-  Theme,
   WalletProfile,
 } from "../types";
 import {
@@ -31,12 +30,10 @@ export const emptySession = (): SessionData => ({
 });
 interface Store {
   mode: Mode | null;
-  theme: Theme;
   onboardingComplete: boolean;
   demo: SessionData;
   live: SessionData;
   setMode: (mode: Mode | null) => void;
-  setTheme: (theme: Theme) => void;
   completeOnboarding: () => void;
   resetOnboarding: () => void;
   setDeck: (mode: Mode, wallets: WalletProfile[]) => void;
@@ -83,12 +80,10 @@ export const useAppStore = create<Store>()(
   persist(
     (set, get) => ({
       mode: null,
-      theme: "light",
       onboardingComplete: false,
       demo: emptySession(),
       live: emptySession(),
       setMode: (mode) => set({ mode }),
-      setTheme: (theme) => set({ theme }),
       completeOnboarding: () => set({ onboardingComplete: true }),
       resetOnboarding: () => set({ onboardingComplete: false }),
       setDeck: (mode, deck) =>
@@ -265,14 +260,10 @@ export const useAppStore = create<Store>()(
       migrate: (persisted, version) => {
         const state = persisted as Pick<
           Store,
-          "mode" | "theme" | "onboardingComplete" | "demo" | "live"
+          "mode" | "onboardingComplete" | "demo" | "live"
         > & {
-          theme?: Theme;
           onboardingComplete?: boolean;
         };
-        if (state.theme !== "light" && state.theme !== "dark") {
-          state.theme = "light";
-        }
         if (typeof state.onboardingComplete !== "boolean") {
           // Returning users who already have a mode skip the new welcome screen.
           state.onboardingComplete =

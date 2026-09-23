@@ -1,6 +1,5 @@
 export type Tab = "swipe" | "roster" | "signals";
 export type Mode = "demo" | "live";
-export type Theme = "light" | "dark";
 export interface TopToken {
   symbol: string;
   address: string;
