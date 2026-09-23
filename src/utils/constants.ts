@@ -19,4 +19,4 @@ export const QUOTE_SYMBOLS = new Set([
 ]);
 
 export const DEFAULT_DEX_URL =
-  "https://app.uniswap.org/explore/tokens/robinhood/{token}";
+  "https://fomo.family/tokens/robinhood/{token}";

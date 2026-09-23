@@ -114,7 +114,7 @@ export function SignalCard({
           target="_blank"
           rel="noopener noreferrer"
         >
-          Copy this trade on Uniswap <ExternalLink size={14} />
+          View this on Fomo <ExternalLink size={14} />
         </a>
       ) : (
         <button className="copy-trade" onClick={() => onCopy(s.tokenAddress)}>
@@ -126,7 +126,7 @@ export function SignalCard({
         <p className="dex-note">
           {demo
             ? "Sample trade · demo tokens are fictional"
-            : "Copy this trade: DEX link not configured"}
+            : "View on Fomo: link not configured"}
         </p>
       )}
     </article>
