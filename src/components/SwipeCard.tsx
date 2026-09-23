@@ -190,7 +190,6 @@ export function SwipeCard({
                   </strong>
                 </div>
               </div>
-              <GreatestHits wallet={wallet} />
               <section className="holdings-section">
                 <div className="section-label">
                   <Heart size={14} />

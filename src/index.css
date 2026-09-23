@@ -566,9 +566,8 @@ button svg {
   justify-content: center;
 }
 .holdings-section {
-  margin-top: 14px;
-  padding-top: 13px;
-  border-top: 1px solid var(--line);
+  margin-top: 4px;
+  padding-top: 0;
 }
 .token-chips {
   display: flex;
@@ -607,19 +606,29 @@ button svg {
   font-weight: 700;
 }
 .swipe-button {
+  box-sizing: border-box;
   width: 59px;
   height: 59px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   padding: 0;
-  line-height: 1;
+  margin: 0;
+  line-height: 0;
+  font-size: 0;
+  -webkit-appearance: none;
+  appearance: none;
   transition: transform 0.12s;
 }
 .swipe-button svg {
   display: block;
   flex-shrink: 0;
+  /* Kill the inline-SVG baseline gap that makes icons sit high. */
+  overflow: visible;
+}
+/* Lucide Heart is optically top-heavy in its viewBox; nudge it down a hair. */
+.match-button svg {
+  transform: translateY(0.5px);
 }
 .swipe-button:active {
   transform: scale(0.93);
