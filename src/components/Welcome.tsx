@@ -11,7 +11,7 @@ export function Welcome({ onContinue }: { onContinue: () => void }) {
     <div className="welcome">
       <div className="welcome-brand" aria-label="Smartcrush">
         <span className="brand-mark welcome-mark">
-          <Heart size={28} fill="currentColor" strokeWidth={0} />
+          <Heart size={30} fill="currentColor" strokeWidth={0} />
         </span>
         <span className="brand-wordmark welcome-wordmark">
           Smart<span>crush</span>
@@ -36,7 +36,7 @@ export function Welcome({ onContinue }: { onContinue: () => void }) {
         type="button"
         onClick={onContinue}
       >
-        Enter Smartcrush <ArrowRight size={17} />
+        Enter Smartcrush App <ArrowRight size={18} />
       </button>
       <p className="welcome-footnote">
         Remember... If it's not working out, you can break up with your

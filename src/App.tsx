@@ -1,10 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  AlertCircle,
-  Heart,
-  Settings2,
-  X,
-} from "lucide-react";
+import { AlertCircle, Heart, Settings2, X } from "lucide-react";
 import { useAppStore } from "./store/useAppStore";
 import type { Holding, Mode, RosterUpdate, Tab, WalletProfile } from "./types";
 import { DAY_MS, DECK_SIZE, POLL_MS } from "./utils/constants";
@@ -33,11 +28,17 @@ import { Modal } from "./components/Modal";
 import { Connection } from "./components/Connection";
 import { SettingsMenu } from "./components/SettingsMenu";
 import { Welcome } from "./components/Welcome";
+import {
+  type AppRoute,
+  navigate,
+  normalizeLocation,
+  pathToRoute,
+} from "./utils/routing";
 import { MatchModal } from "./components/MatchModal";
 import { RosterCapacity } from "./components/RosterCapacity";
 export default function App() {
   const store = useAppStore(),
-    { mode, onboardingComplete } = store;
+    { mode } = store;
   const [tab, setTab] = useState<Tab>("swipe"),
     [keyReady, setKeyReady] = useState(hasApiKey());
   const [settings, setSettings] = useState(false),
@@ -59,6 +60,11 @@ export default function App() {
     pollRetryAt = useRef(0),
     lastRoster = useRef("");
   const main = useRef<HTMLElement>(null);
+  const [route, setRoute] = useState<AppRoute>(() =>
+    typeof window !== "undefined"
+      ? pathToRoute(window.location.pathname)
+      : "welcome",
+  );
   const data = mode ? store[mode] : null;
   const rosterSignature =
     data?.roster.map((r) => `${r.wallet.address}:${r.addedAt}`).join(",") || "";
@@ -67,6 +73,7 @@ export default function App() {
   const holdingsAttempt = useRef("");
   useEffect(() => {
     if (
+      route !== "app" ||
       mode !== "live" ||
       !ready ||
       !currentWallet ||
@@ -103,15 +110,17 @@ export default function App() {
       .catch(() => {
         /* Keep the explicit unavailable state until the next visit. */
       });
-  }, [mode, ready, currentWallet]);
+  }, [route, mode, ready, currentWallet]);
   useEffect(() => {
     if (!mode && hasApiKey()) store.setMode("live");
   }, [mode, store.setMode]);
 
-  const forceWelcome =
-    typeof window !== "undefined" &&
-    new URLSearchParams(window.location.search).get("welcome") === "1";
-  const showWelcome = forceWelcome || !onboardingComplete;
+  useEffect(() => {
+    setRoute(normalizeLocation());
+    const onPop = () => setRoute(pathToRoute(window.location.pathname));
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 10000);
     const visible = () => {
@@ -310,11 +319,10 @@ export default function App() {
     [mode, ready],
   );
   useEffect(() => {
-    if (!document.hidden) {
-      void loadDeck();
-      void poll();
-    }
-  }, [loadDeck, poll, now, rosterSignature]);
+    if (route !== "app" || document.hidden) return;
+    void loadDeck();
+    void poll();
+  }, [loadDeck, poll, now, rosterSignature, route]);
   const switchMode = (next: Mode, key = "") => {
     generation.current++;
     setApiKey(next === "live" ? key : "");
@@ -331,7 +339,6 @@ export default function App() {
     setPollError("");
     setProgress(0);
     store.setMode(next);
-    setSettings(false);
     setTab("swipe");
     setNow(Date.now());
   };
@@ -346,65 +353,75 @@ export default function App() {
   const closeSettings = useCallback(() => setSettings(false), []),
     closeFull = useCallback(() => setFull(false), []),
     closeBreakup = useCallback(() => setBreaking(null), []);
+  const goToApp = useCallback(() => {
+    store.completeOnboarding();
+    navigate("app");
+    setRoute("app");
+  }, [store]);
+  if (route === "welcome") {
+    return (
+      <AppFrame>
+        <main className="main-content" ref={main} id="main-content">
+          <Welcome onContinue={goToApp} />
+        </main>
+      </AppFrame>
+    );
+  }
   return (
     <AppFrame>
-      {!showWelcome && (
-        <header className="app-header">
-          <a
-            className="brand"
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              setTab("swipe");
-            }}
-            aria-label="Smartcrush home"
-          >
-            <span className="brand-mark">
-              <Heart size={19} fill="currentColor" strokeWidth={0} />
+      <header className="app-header">
+        <a
+          className="brand"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            setTab("swipe");
+          }}
+          aria-label="Smartcrush home"
+        >
+          <span className="brand-mark">
+            <Heart size={19} fill="currentColor" strokeWidth={0} />
+          </span>
+          <span className="brand-lockup">
+            <span className="brand-wordmark">
+              Smart<span>crush</span>
+              <i>™</i>
             </span>
-            <span className="brand-lockup">
-              <span className="brand-wordmark">
-                Smart<span>crush</span>
-                <i>™</i>
-              </span>
-            </span>
-          </a>
-          <div className="header-right">
+          </span>
+        </a>
+        <div className="header-right">
+          <div className="header-status">
             <span className="chain-pill">
               <span /> ROBINHOOD
             </span>
-            <button
-              className="icon-button"
-              aria-label="Settings"
-              onClick={() => setSettings(true)}
-            >
-              <Settings2 size={18} />
-            </button>
+            {mode && (
+              <span
+                className={
+                  mode === "live"
+                    ? "mode-indicator mode-live"
+                    : "mode-indicator mode-demo"
+                }
+              >
+                {mode === "live" ? "LIVE" : "DEMO"}
+              </span>
+            )}
           </div>
-        </header>
-      )}
+          <button
+            className="icon-button"
+            aria-label="Settings"
+            onClick={() => setSettings(true)}
+          >
+            <Settings2 size={18} />
+          </button>
+        </div>
+      </header>
 
       <main
-        className={`main-content${tab === "swipe" && ready && !showWelcome ? " swipe-locked" : ""}`}
+        className={`main-content${tab === "swipe" && ready ? " swipe-locked" : ""}`}
         ref={main}
         id="main-content"
       >
-        {showWelcome ? (
-          <Welcome
-            onContinue={() => {
-              store.completeOnboarding();
-              if (forceWelcome) {
-                const url = new URL(window.location.href);
-                url.searchParams.delete("welcome");
-                window.history.replaceState(
-                  {},
-                  "",
-                  url.pathname + url.search + url.hash,
-                );
-              }
-            }}
-          />
-        ) : !ready ? (
+        {!ready ? (
           <Connection
             onConnect={(key) => switchMode("live", key)}
             onConfiguredConnect={
@@ -539,10 +556,27 @@ export default function App() {
         <Modal title="Settings" onClose={closeSettings}>
           <SettingsMenu
             mode={mode}
-            onModeChange={(next) => {
-              if (next === mode) return;
-              if (next === "live") switchMode("live", configuredApiKey);
-              else switchMode("demo");
+            onModeChange={(next, key = "") => {
+              if (next === "demo") {
+                if (mode === "demo") return;
+                switchMode("demo");
+                return;
+              }
+              const trimmed = key.trim();
+              if (trimmed) {
+                switchMode("live", trimmed);
+                return;
+              }
+              // Empty key: keep project-key path when available; otherwise
+              // switchMode leaves keyReady false so Connection asks for a key.
+              if (mode === "live") return;
+              switchMode("live", "");
+            }}
+            onSaveApiKey={(key) => {
+              const trimmed = key.trim();
+              if (!trimmed) return;
+              // Apply / override while Live (or enter Live with this key).
+              switchMode("live", trimmed);
             }}
           />
         </Modal>

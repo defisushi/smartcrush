@@ -153,6 +153,25 @@ button svg {
   align-items: center;
   gap: 3px;
 }
+.header-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.mode-indicator {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  line-height: 1;
+  color: var(--muted, #8a8578);
+}
+.mode-indicator.mode-live {
+  color: #728b45;
+}
+.mode-indicator.mode-demo {
+  color: var(--muted, #8a8578);
+}
 .chain-pill {
   display: flex;
   gap: 5px;
@@ -2523,6 +2542,11 @@ body {
   font: inherit;
   font-size: 16px;
 }
+
+.nickname-modal input:focus,
+.nickname-modal input:focus-visible {
+  outline: none;
+}
 .nickname-modal .nickname-help {
   font-size: 10px;
   line-height: 1.5;
@@ -2657,6 +2681,41 @@ body {
   font-size: 10px;
   line-height: 1.45;
   color: var(--muted);
+}
+.settings-menu form > label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 9px;
+}
+.settings-menu .key-field input {
+  font-size: 9px;
+}
+.settings-menu .key-field input:focus,
+.settings-menu .key-field input:focus-visible,
+.key-field input:focus,
+.key-field input:focus-visible {
+  outline: none;
+}
+
+.settings-menu .key-note {
+  font-size: 8px;
+}
+.settings-api-key.is-disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.settings-api-key.is-disabled .settings-label,
+.settings-api-key.is-disabled .key-note {
+  color: var(--muted, #8a8578);
+}
+
+.settings-api-key .button.primary {
+  width: 100%;
 }
 .segmented {
   display: grid;
@@ -2812,7 +2871,7 @@ input::placeholder {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 36px 22px 40px;
+  padding: 32px 20px 36px;
   min-height: 100%;
   width: 100%;
   flex: 1;
@@ -2826,34 +2885,34 @@ input::placeholder {
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 .welcome-mark {
-  width: 56px;
-  height: 58px;
+  width: 60px;
+  height: 62px;
   border-radius: 16px;
   margin-right: 0;
   transform: rotate(-8deg);
 }
 .welcome-wordmark {
-  font-size: 34px;
+  font-size: 38px;
   letter-spacing: -1.8px;
 }
 .welcome-wordmark i {
-  font-size: 11px;
+  font-size: 13px;
 }
 .welcome-tagline {
-  margin: 0 0 72px;
-  max-width: 280px;
-  font-size: 12px;
-  line-height: 1.55;
+  margin: 0 0 56px;
+  max-width: 340px;
+  font-size: 15.5px;
+  line-height: 1.45;
   font-weight: 500;
   color: var(--muted);
   text-align: center;
 }
 .welcome-eyebrow {
-  margin: 0 0 16px;
-  font-size: 12px;
+  margin: 0 0 14px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 1.4px;
   color: var(--muted);
@@ -2872,9 +2931,10 @@ input::placeholder {
 }
 .welcome-steps {
   list-style: none;
-  margin: 0 0 76px;
+  margin: 0 0 52px;
   padding: 0;
   width: 100%;
+  max-width: 360px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -2883,39 +2943,47 @@ input::placeholder {
 .welcome-steps li {
   display: flex;
   flex-direction: row;
-  gap: 10px;
-  align-items: baseline;
-  padding: 14px 14px;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px 16px;
   border-radius: 14px;
   background: var(--card, #fff);
   border: 1px solid var(--line, var(--border-strong, #cbb58e));
 }
 .welcome-step-num {
   flex-shrink: 0;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
   color: var(--coral);
   letter-spacing: 0.04em;
-  line-height: 1.2;
-  min-width: 0.9em;
+  line-height: 1.35;
+  min-width: 1em;
 }
 .welcome-step-copy {
-  font-size: 11px;
-  line-height: 1.2;
+  font-size: 14px;
+  line-height: 1.35;
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--ink);
-  white-space: nowrap;
 }
 .welcome-cta {
   width: 100%;
-  max-width: 320px;
+  max-width: 360px;
+  min-height: 52px;
+  font-size: 16px;
+  line-height: 1;
+}
+.welcome-cta svg {
+  display: block;
+  flex-shrink: 0;
+  /* Optical center with caption text (Lucide inline SVG baseline gap). */
+  transform: translateY(0.5px);
 }
 .welcome-footnote {
-  margin: 18px 0 0;
-  max-width: 300px;
-  font-size: 11px;
-  line-height: 1.5;
+  margin: 20px 0 0;
+  max-width: 340px;
+  font-size: 12px;
+  line-height: 1.45;
   font-weight: 500;
   color: var(--muted);
   text-align: center;
