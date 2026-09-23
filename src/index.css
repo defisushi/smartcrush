@@ -1271,6 +1271,14 @@ button svg {
 .context-badge small {
   font-size: 8px;
 }
+a.copy-address.token-fomo-link {
+  text-decoration: none;
+  cursor: pointer;
+}
+a.copy-address.token-fomo-link:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
 .copy-address {
   border: 0;
   background: transparent;
