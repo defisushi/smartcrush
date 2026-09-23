@@ -112,8 +112,8 @@ export default function App() {
       });
   }, [route, mode, ready, currentWallet]);
   useEffect(() => {
-    if (!mode && hasApiKey()) store.setMode("live");
-  }, [mode, store.setMode]);
+    if (route === "app" && !mode) store.setMode("demo");
+  }, [route, mode, store.setMode]);
 
   useEffect(() => {
     setRoute(normalizeLocation());
@@ -355,6 +355,7 @@ export default function App() {
     closeBreakup = useCallback(() => setBreaking(null), []);
   const goToApp = useCallback(() => {
     store.completeOnboarding();
+    store.setMode("demo");
     navigate("app");
     setRoute("app");
   }, [store]);
