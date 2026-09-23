@@ -1,4 +1,4 @@
-import { Copy, ExternalLink } from "lucide-react";
+import { Copy } from "lucide-react";
 import type { Signal } from "../types";
 import {
   cleanTokenSymbol,
@@ -99,36 +99,18 @@ export function SignalCard({
         <span className={`context-badge ${s.action}`}>
           Looks like… {contexts[s.contextBadge]}
         </span>
-        <button
-          className="copy-address"
-          aria-label={`Copy ${tokenSymbol} token address`}
-          onClick={() => onCopy(s.tokenAddress)}
-        >
-          {shortAddress(s.tokenAddress)} <Copy size={12} />
-        </button>
+        {url ? (
+          <a
+            className="copy-address token-fomo-link"
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`View ${tokenSymbol} on Fomo`}
+          >
+            View on Fomo
+          </a>
+        ) : null}
       </div>
-      {url ? (
-        <a
-          className="copy-trade"
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          View this on Fomo <ExternalLink size={14} />
-        </a>
-      ) : (
-        <button className="copy-trade" onClick={() => onCopy(s.tokenAddress)}>
-          {demo ? "Copy demo token address" : "Copy token address"}{" "}
-          <Copy size={14} />
-        </button>
-      )}
-      {!url && (
-        <p className="dex-note">
-          {demo
-            ? "Sample trade · demo tokens are fictional"
-            : "View on Fomo: link not configured"}
-        </p>
-      )}
     </article>
   );
 }
