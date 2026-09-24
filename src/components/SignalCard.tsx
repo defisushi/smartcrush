@@ -26,13 +26,27 @@ export function SignalCard({
   nickname?: string;
   onCopy: (text: string) => void;
 }) {
-  const url = !demo
-    ? dexLink(
-        import.meta.env.VITE_ROBINHOOD_DEX_URL || DEFAULT_DEX_URL,
-        s.tokenAddress,
-      )
-    : null;
+  const url =
+    !demo && s.tokenAddress
+      ? dexLink(
+          import.meta.env.VITE_ROBINHOOD_DEX_URL || DEFAULT_DEX_URL,
+          s.tokenAddress,
+        )
+      : null;
   const tokenSymbol = cleanTokenSymbol(s.tokenSymbol);
+  const tokenName = url ? (
+    <a
+      className="token-fomo-name"
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Open ${tokenSymbol} on Fomo`}
+    >
+      {tokenSymbol}
+    </a>
+  ) : (
+    tokenSymbol
+  );
   return (
     <article className="signal-card">
       <div className="signal-who">
@@ -82,7 +96,7 @@ export function SignalCard({
           <span className={`signal-action-pill ${s.action}`}>
             {s.action === "buy" ? "Bought" : "Sold"}
           </span>
-          <h3>{tokenSymbol}</h3>
+          <h3>{tokenName}</h3>
         </div>
         <div className="trade-amount">
           <strong>
@@ -99,17 +113,6 @@ export function SignalCard({
         <span className={`context-badge ${s.action}`}>
           Looks like… {contexts[s.contextBadge]}
         </span>
-        {url ? (
-          <a
-            className="copy-address token-fomo-link"
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`View ${tokenSymbol} on Fomo`}
-          >
-            View on Fomo
-          </a>
-        ) : null}
       </div>
     </article>
   );

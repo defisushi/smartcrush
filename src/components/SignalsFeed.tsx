@@ -48,7 +48,7 @@ export function SignalsFeed({
         </div>
       </div>
       {signals.length > 0 && (
-        <SignalsSummary signals={signals} onCopy={onCopy} />
+        <SignalsSummary signals={signals} demo={demo} onCopy={onCopy} />
       )}
       <div className="feed-heading">
         <span>24H Activity · Updates Hourly</span>
