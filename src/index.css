@@ -1460,6 +1460,17 @@ a.token-fomo-name:hover {
 .match-search > p.loading-wait {
   margin: 0 0 14px;
   color: var(--muted);
+  animation: loading-wait-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes loading-wait-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .loading-heart {
