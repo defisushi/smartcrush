@@ -32,19 +32,22 @@ export function SkeletonCard({
         </>
       )}
       {showHeart && (
-        <div className="loading-heart" aria-hidden="true">
-          <Heart className="loading-heart-empty" strokeWidth={1.75} />
-          <div
-            className="loading-heart-fill-clip"
-            style={{ clipPath: `inset(${100 - pct}% 0 0 0)` }}
-          >
-            <Heart
-              className="loading-heart-full"
-              strokeWidth={1.75}
-              fill="currentColor"
-            />
+        <>
+          <p className="loading-wait">Please wait...</p>
+          <div className="loading-heart" aria-hidden="true">
+            <Heart className="loading-heart-empty" strokeWidth={1.75} />
+            <div
+              className="loading-heart-fill-clip"
+              style={{ clipPath: `inset(${100 - pct}% 0 0 0)` }}
+            >
+              <Heart
+                className="loading-heart-full"
+                strokeWidth={1.75}
+                fill="currentColor"
+              />
+            </div>
           </div>
-        </div>
+        </>
       )}
       <p>{label}</p>
     </div>

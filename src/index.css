@@ -1457,6 +1457,10 @@ a.token-fomo-name:hover {
 .match-search > p {
   margin: 14px 0 0;
 }
+.match-search > p.loading-wait {
+  margin: 0 0 14px;
+  color: var(--muted);
+}
 
 .loading-heart {
   position: relative;
