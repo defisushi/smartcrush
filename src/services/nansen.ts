@@ -7,6 +7,7 @@ import type {
 } from "../types";
 import { CHAIN, DAY_MS, DECK_SIZE } from "../utils/constants";
 import { cleanTokenSymbol } from "../utils/formatters";
+import nansenAccess from "../../nansen-access.json";
 // API key is NEVER baked into the frontend bundle. The proxy injects it.
 export const configuredApiKey = "";
 export const projectConnectionAvailable: boolean =
@@ -68,6 +69,7 @@ export async function nansenPost<T>(
   endpoint: string,
   body: object,
 ): Promise<T> {
+  if (nansenAccess.paused) throw new NansenError(nansenAccess.message, 423);
   const key = apiKey,
     signal = controller.signal,
     projectKey = usingProjectKey;

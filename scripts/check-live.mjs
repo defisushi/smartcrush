@@ -1,4 +1,9 @@
 import { loadEnv } from "vite";
+import { readFileSync } from "node:fs";
+const nansenAccess = JSON.parse(
+  readFileSync(new URL("../nansen-access.json", import.meta.url), "utf8"),
+);
+if (nansenAccess.paused) throw new Error(nansenAccess.message);
 const key = loadEnv("development", "./backend", "NANSEN_").NANSEN_API_KEY;
 if (!key) throw new Error("NANSEN_API_KEY missing");
 const response = await fetch(

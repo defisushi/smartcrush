@@ -1,5 +1,16 @@
 # Smartcrush
 
+## Nansen requests paused
+
+As of 1 October 2026, `nansen-access.json` has `"paused": true` at the owner's request.
+The browser client, Cloudflare and Vercel proxies, local Vite proxy, legacy Python
+client, and live-check script block Nansen calls before contacting the service.
+Saved data and credentials remain intact; demo mode is available. To resume,
+change the flag to `false` and redeploy/restart the relevant services. The pause
+regression tests intentionally apply only while the flag is enabled. Live API
+browser tests expect an unpaused service and should not be used to justify
+turning this pause off without the owner's request.
+
 A mobile-only smart-money dating app built from `CODEX_BUILD_PROMPT.md`. Scout wallets on Robinhood chain, match with up to ten, and follow their trades.
 
 This is the current application at the **project root**. The previous `backend/` and `frontend/` applications are legacy; local development still reads the project credential from `backend/.env`.

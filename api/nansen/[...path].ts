@@ -1,6 +1,11 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import nansenAccess from "../../nansen-access.json";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (nansenAccess.paused) {
+    res.setHeader("Cache-Control", "no-store");
+    return res.status(423).json({ error: nansenAccess.message, paused: true });
+  }
   const segments = req.query.path;
   const path = Array.isArray(segments) ? segments.join("/") : segments || "";
   const target = `https://api.nansen.ai/${path}`;

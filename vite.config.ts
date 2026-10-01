@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
+import nansenAccess from "./nansen-access.json";
 
 export default defineConfig(({ command, mode }) => {
   // In dev: load the backend key for the local proxy.
@@ -16,7 +17,27 @@ export default defineConfig(({ command, mode }) => {
   const useProxy = command === "build" || Boolean(projectKey);
 
   return {
-    plugins: [react()],
+    plugins: [
+      react(),
+      {
+        name: "nansen-pause",
+        configureServer(server) {
+          server.middlewares.use("/api/nansen", (_request, response, next) => {
+            if (!nansenAccess.paused) {
+              next();
+              return;
+            }
+            response.writeHead(423, {
+              "Content-Type": "application/json",
+              "Cache-Control": "no-store",
+            });
+            response.end(
+              JSON.stringify({ error: nansenAccess.message, paused: true }),
+            );
+          });
+        },
+      },
+    ],
     define: {
       "import.meta.env.VITE_NANSEN_PROXY": JSON.stringify(useProxy),
       ...(mode === "test"

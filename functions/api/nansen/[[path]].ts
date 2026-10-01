@@ -1,8 +1,20 @@
+import nansenAccess from "../../../nansen-access.json";
+
 interface Env {
   NANSEN_API_KEY: string;
 }
 
-export const onRequest: PagesFunction<Env> = async (context) => {
+export const onRequest = async (context: {
+  request: Request;
+  env: Env;
+  params: { path?: string | string[] };
+}) => {
+  if (nansenAccess.paused) {
+    return Response.json(
+      { error: nansenAccess.message, paused: true },
+      { status: 423, headers: { "Cache-Control": "no-store" } },
+    );
+  }
   const { request, env, params } = context;
   const segments = params.path;
   const path = Array.isArray(segments) ? segments.join("/") : segments || "";
@@ -14,7 +26,10 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   const apiKey = clientKey || env.NANSEN_API_KEY || "";
 
   if (!apiKey) {
-    return Response.json({ error: "No API key configured on the server." }, { status: 401 });
+    return Response.json(
+      { error: "No API key configured on the server." },
+      { status: 401 },
+    );
   }
 
   if (request.method === "OPTIONS") {
@@ -41,7 +56,8 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
     // Forward rate-limit headers so the client's retry logic works.
     const headers = new Headers({
-      "Content-Type": upstream.headers.get("content-type") || "application/json",
+      "Content-Type":
+        upstream.headers.get("content-type") || "application/json",
     });
     const retryAfter = upstream.headers.get("retry-after");
     if (retryAfter) headers.set("Retry-After", retryAfter);
@@ -49,6 +65,9 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     const data = await upstream.text();
     return new Response(data, { status: upstream.status, headers });
   } catch {
-    return Response.json({ error: "Failed to reach Nansen API." }, { status: 502 });
+    return Response.json(
+      { error: "Failed to reach Nansen API." },
+      { status: 502 },
+    );
   }
 };

@@ -36,6 +36,7 @@ import {
 } from "./utils/routing";
 import { MatchModal } from "./components/MatchModal";
 import { RosterCapacity } from "./components/RosterCapacity";
+import nansenAccess from "../nansen-access.json";
 export default function App() {
   const store = useAppStore(),
     { mode } = store;
@@ -75,6 +76,7 @@ export default function App() {
     if (
       route !== "app" ||
       mode !== "live" ||
+      nansenAccess.paused ||
       !ready ||
       !currentWallet ||
       currentWallet.holdingsAvailable
@@ -152,6 +154,7 @@ export default function App() {
     async (force = false) => {
       if (
         !mode ||
+        (mode === "live" && nansenAccess.paused) ||
         !ready ||
         deckBusy.current ||
         (!force && Date.now() < deckRetryAt.current)
@@ -213,6 +216,7 @@ export default function App() {
     async (force = false) => {
       if (
         !mode ||
+        (mode === "live" && nansenAccess.paused) ||
         !ready ||
         pollBusy.current ||
         (!force && Date.now() < pollRetryAt.current)
@@ -461,6 +465,12 @@ export default function App() {
                   </p>
                 </div>
               </div>
+              {mode === "live" && nansenAccess.paused && (
+                <div className="error-banner" role="status">
+                  <AlertCircle size={18} />
+                  <p>{nansenAccess.message}</p>
+                </div>
+              )}
               {((tab === "swipe" && deckError) ||
                 (tab !== "swipe" && pollError)) && (
                 <div className="error-banner" role="alert">

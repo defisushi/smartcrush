@@ -1,8 +1,10 @@
 import asyncio
 import inspect
+import json
 import logging
 import time
 from collections.abc import Awaitable, Callable, Mapping
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -155,6 +157,11 @@ class NansenClient:
                 break
 
     async def _post(self, path: str, payload: Payload | None = None) -> Any:
+        access = json.loads(
+            (Path(__file__).resolve().parents[2] / "nansen-access.json").read_text()
+        )
+        if access["paused"]:
+            raise NansenConfigurationError(access["message"])
         if not self.api_key:
             raise NansenConfigurationError(
                 "NANSEN_API_KEY is not configured. Add it to backend/.env."
